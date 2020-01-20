@@ -1,13 +1,12 @@
-<h1>All Sales Vinyl</h1>
+<h1>Volunteer Tracker</h1>
 
-<h3>Available Records</h3>
+<h3>Projects</h3>
 
 <% if @projects.any? %>
 <table style="width:100%">
     <tr>
         <th>Project Name</th>
-        <th>Artist</th>
-        <th>BUY</th>
+
     </tr>
     <% @projects.each do |project| %>
     <tr>
@@ -19,15 +18,7 @@
     <% end %>
 </table>
 <% else %>
-<p>There are currently no records to display.</p>
+<p>There are currently no Projectss to display.</p>
 <% end %>
 
 <a href="/projects/new">Add a new project</a>
-
-<form action="/projects" method='post'>
-        <label>
-            Search
-            <input name="search" type="text">
-        </label>
-    <button type="submit">Go!</button>
-</form>
