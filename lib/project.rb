@@ -1,4 +1,4 @@
-class Album
+class Project
     attr_accessor :name, :year, :genre, :artist, :id
     def initialize(attributes)
         @name = attributes[:name]
@@ -8,7 +8,7 @@ class Album
         @id = attributes[:id]
     end
     def save
-        @id = DB.exec("INSERT INTO albums (name) VALUES ('#{@name}') RETURNING id;").first.fetch("id").to_i
+        @id = DB.exec("INSERT INTO projects (name) VALUES ('#{@name}') RETURNING id;").first.fetch("id").to_i
         self
     end
     def update(new_attrs)
@@ -16,14 +16,14 @@ class Album
         # @year = new_attrs[:year]
         # @genre = new_attrs[:genre]
         # @artist = new_attrs[:artist]
-        DB.exec("UPDATE albums SET name = '#{@name}' WHERE id = #{@id};")
-        # DB.exec("UPDATE albums SET year = '#{@year}' WHERE id = #{@id};")
-        # DB.exec("UPDATE albums SET genre = '#{@genre}' WHERE id = #{@id};")
-        # DB.exec("UPDATE albums SET artist = '#{@artist}' WHERE id = #{@id};")
+        DB.exec("UPDATE projects SET name = '#{@name}' WHERE id = #{@id};")
+        # DB.exec("UPDATE projects SET year = '#{@year}' WHERE id = #{@id};")
+        # DB.exec("UPDATE projects SET genre = '#{@genre}' WHERE id = #{@id};")
+        # DB.exec("UPDATE projects SET artist = '#{@artist}' WHERE id = #{@id};")
     end
     def delete
-        DB.exec("DELETE FROM albums WHERE id = #{@id};")
-        DB.exec("DELETE FROM songs WHERE album_id = #{@id};")
+        DB.exec("DELETE FROM projects WHERE id = #{@id};")
+        DB.exec("DELETE FROM volunteers WHERE project_id = #{@id};")
     end
     def ==(compare)
         (@name == compare.name) && (@year == compare.year) && (@genre == compare.genre) && (@artist == compare.artist)
@@ -31,24 +31,24 @@ class Album
 
     #class methods
     def self.all
-        DB.exec("SELECT * FROM albums;").map do |album|
-            attributes = self.keys_to_sym(album)
-            Album.new(attributes)
+        DB.exec("SELECT * FROM projects;").map do |project|
+            attributes = self.keys_to_sym(project)
+            Project.new(attributes)
         end
     end
     def self.clear
-        DB.exec("DELETE FROM albums *;")
+        DB.exec("DELETE FROM projects *;")
     end
     def self.find(search_id)
-        attributes = self.keys_to_sym(DB.exec("SELECT * FROM albums WHERE id = #{search_id};").first)
-        Album.new(attributes)
+        attributes = self.keys_to_sym(DB.exec("SELECT * FROM projects WHERE id = #{search_id};").first)
+        Project.new(attributes)
     end
     # def self.sort
-    #     @@albums.values.sort {|a, b| a.name <=> b.name}
+    #     @@projects.values.sort {|a, b| a.name <=> b.name}
     # end
 
-    def songs
-        Song.find_by_album(@id)
+    def volunteers
+        Volunteer.find_by_project(@id)
     end
 
     private

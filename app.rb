@@ -1,66 +1,66 @@
 require 'sinatra'
 require 'sinatra/reloader'
-require './lib/album'
-require './lib/song'
+require './lib/project'
+require './lib/volunteer'
 require 'pry'
 require 'pg'
 
-DB = PG.connect({:dbname => "record_store"})
+DB = PG.connect({:dbname => "volunteer_tracker"})
 also_reload 'lib/**/*.rb'
 
 get '/' do
-    redirect to '/albums'
+    redirect to '/projects'
 end
 
-get '/albums' do
-    @albums = Album.all
-    erb :albums
+get '/projects' do
+    @projects = Project.all
+    erb :projects
 end
-post '/albums' do
-    Album.new(params).save
-    redirect to '/albums'
-end
-
-get '/albums/new' do
-    erb :albums_new
+post '/projects' do
+    Project.new(params).save
+    redirect to '/projects'
 end
 
-get '/albums/:id' do
-    @album = Album.find(params[:id].to_i)
-    erb :albums_ID
-end
-patch '/albums/:id' do
-    Album.find(params[:id].to_i).update(params)
-    redirect to "/albums/#{params[:id]}"
-end
-delete '/albums/:id' do
-    Album.find(params[:id].to_i).delete
-    redirect to '/albums'
+get '/projects/new' do
+    erb :projects_new
 end
 
-get '/albums/:id/edit' do
-    @album = Album.find(params[:id])
-    erb :albums_ID_edit
+get '/projects/:id' do
+    @project = Project.find(params[:id].to_i)
+    erb :projects_ID
+end
+patch '/projects/:id' do
+    Project.find(params[:id].to_i).update(params)
+    redirect to "/projects/#{params[:id]}"
+end
+delete '/projects/:id' do
+    Project.find(params[:id].to_i).delete
+    redirect to '/projects'
 end
 
-#////////////////// Songs routes /////////////////////
-post '/albums/:id' do
-    params[:album_id] = params[:id]
-    params[:asdf] = Song.new(params).save
-    redirect to "/albums/#{params[:id]}"
+get '/projects/:id/edit' do
+    @project = Project.find(params[:id])
+    erb :projects_ID_edit
 end
 
-get '/albums/:id/songs/:song_id' do
-    @song = Song.find(params[:song_id].to_i)
-    erb :album_ID_song_ID
-end
-patch '/albums/:id/songs/:song_id' do
-    Song.find(params[:song_id].to_i).update(params)
-    redirect to "/albums/#{params[:id]}"
+#////////////////// Volunteers routes /////////////////////
+post '/projects/:id' do
+    params[:project_id] = params[:id]
+    params[:asdf] = Volunteer.new(params).save
+    redirect to "/projects/#{params[:id]}"
 end
 
-delete('/albums/:id/songs/:song_id') do
-    Song.find(params[:song_id].to_i).delete
-    @album = Album.find(params[:id].to_i)
-    erb(:albums_ID)
+get '/projects/:id/volunteers/:volunteer_id' do
+    @volunteer = Volunteer.find(params[:volunteer_id].to_i)
+    erb :project_ID_volunteer_ID
+end
+patch '/projects/:id/volunteers/:volunteer_id' do
+    Volunteer.find(params[:volunteer_id].to_i).update(params)
+    redirect to "/projects/#{params[:id]}"
+end
+
+delete('/projects/:id/volunteers/:volunteer_id') do
+    Volunteer.find(params[:volunteer_id].to_i).delete
+    @project = Project.find(params[:id].to_i)
+    erb(:projects_ID)
 end
