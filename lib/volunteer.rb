@@ -40,6 +40,7 @@ class Volunteer
         DB.exec("DELETE FROM volunteers *;")
     end
     def self.find_by_project(alb_id)
+      # binding.pry
         DB.exec("SELECT * FROM volunteers WHERE project_id = #{alb_id};").map do |volunteer|
             attributes = self.keys_to_sym(volunteer)
             Volunteer.new(attributes)

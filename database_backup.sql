@@ -55,12 +55,48 @@ ALTER SEQUENCE public.projects_id_seq OWNED BY public.projects.id;
 
 
 --
+-- Name: songs; Type: TABLE; Schema: public; Owner: bryonburke
+--
+
+CREATE TABLE public.songs (
+    id integer NOT NULL,
+    name character varying,
+    album_id integer
+);
+
+
+ALTER TABLE public.songs OWNER TO bryonburke;
+
+--
+-- Name: songs_id_seq; Type: SEQUENCE; Schema: public; Owner: bryonburke
+--
+
+CREATE SEQUENCE public.songs_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.songs_id_seq OWNER TO bryonburke;
+
+--
+-- Name: songs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: bryonburke
+--
+
+ALTER SEQUENCE public.songs_id_seq OWNED BY public.songs.id;
+
+
+--
 -- Name: volunteers; Type: TABLE; Schema: public; Owner: bryonburke
 --
 
 CREATE TABLE public.volunteers (
     id integer NOT NULL,
-    name character varying
+    name character varying,
+    project_id integer
 );
 
 
@@ -96,6 +132,13 @@ ALTER TABLE ONLY public.projects ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
+-- Name: songs id; Type: DEFAULT; Schema: public; Owner: bryonburke
+--
+
+ALTER TABLE ONLY public.songs ALTER COLUMN id SET DEFAULT nextval('public.songs_id_seq'::regclass);
+
+
+--
 -- Name: volunteers id; Type: DEFAULT; Schema: public; Owner: bryonburke
 --
 
@@ -111,10 +154,18 @@ COPY public.projects (id, name) FROM stdin;
 
 
 --
+-- Data for Name: songs; Type: TABLE DATA; Schema: public; Owner: bryonburke
+--
+
+COPY public.songs (id, name, album_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: volunteers; Type: TABLE DATA; Schema: public; Owner: bryonburke
 --
 
-COPY public.volunteers (id, name) FROM stdin;
+COPY public.volunteers (id, name, project_id) FROM stdin;
 \.
 
 
@@ -122,14 +173,21 @@ COPY public.volunteers (id, name) FROM stdin;
 -- Name: projects_id_seq; Type: SEQUENCE SET; Schema: public; Owner: bryonburke
 --
 
-SELECT pg_catalog.setval('public.projects_id_seq', 1, false);
+SELECT pg_catalog.setval('public.projects_id_seq', 1, true);
+
+
+--
+-- Name: songs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: bryonburke
+--
+
+SELECT pg_catalog.setval('public.songs_id_seq', 1, false);
 
 
 --
 -- Name: volunteers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: bryonburke
 --
 
-SELECT pg_catalog.setval('public.volunteers_id_seq', 1, false);
+SELECT pg_catalog.setval('public.volunteers_id_seq', 2, true);
 
 
 --
@@ -138,6 +196,14 @@ SELECT pg_catalog.setval('public.volunteers_id_seq', 1, false);
 
 ALTER TABLE ONLY public.projects
     ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: songs songs_pkey; Type: CONSTRAINT; Schema: public; Owner: bryonburke
+--
+
+ALTER TABLE ONLY public.songs
+    ADD CONSTRAINT songs_pkey PRIMARY KEY (id);
 
 
 --
